@@ -18,18 +18,15 @@ public class PhyloNode {
         this.id = ++max_id;
         this.seq = seq;
     }
-    public String toString()
-    {
+    public String toString() {
         return Integer.toString(id);
     }
 
-    public int hashCode()
-    {
+    public int hashCode() {
         return toString().hashCode();
     }
 
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         return (o instanceof PhyloNode) && (toString().equals(o.toString()));
     }
     public void updateSeq(String id, DNASequence seq) {
@@ -37,7 +34,7 @@ public class PhyloNode {
         char[] seq_ar = this.seq.getSequenceAsString().toCharArray();
         for (int i=0; i<seq_ar.length; ++i)
             if (seq_ar[i]!='A' && seq_ar[i]!='C' && seq_ar[i]!= 'G' && seq_ar[i]!='T')
-                seq_ar[i]=seq.getCompoundAt(i).getShortName().charAt(0);
+                seq_ar[i]=seq.getCompoundAt(i+1).getShortName().charAt(0);
         try {
             this.seq = new DNASequence(new String(seq_ar));
         } catch (CompoundNotFoundException e) {
