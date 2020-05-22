@@ -1,0 +1,77 @@
+import javafx.util.Pair;
+import org.biojava.nbio.core.sequence.DNASequence;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.*;
+
+public class PhyloTree {
+    Graph<PhyloNode, DefaultEdge> g;
+    LinkedList<Integer> var_pos;
+    public PhyloTree(LinkedList<Integer> var_pos) {
+        g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        this.var_pos = var_pos;
+    }
+    public void buildPhylo(Map<Integer, Set<String>> h_dist_map,
+                           LinkedHashMap<String, DNASequence> seqs,
+                           String ref_id, DNASequence ref_seq) {
+        PhyloNode root = new PhyloNode(ref_id, new HashSet<>(), ref_seq);
+        g.addVertex(root);
+        Object[] keys = h_dist_map.keySet().toArray();
+        Arrays.sort(keys);
+        for (Object k : keys) {
+            for (String id : h_dist_map.get(k)) {
+                List<PhyloNode> parent_candidates = findParentCandidates(seqs.get(id));
+                if (parent_candidates.size() == 1) insertNode(parent_candidates.get(0), id, seqs.get(id));
+                else System.out.println(String.format("Node %s has a conflict on step %d", id, PhyloNode.max_id));
+            }
+        }
+    }
+    private List<PhyloNode> findParentCandidates(DNASequence seq) {
+        int min_h_dist = Integer.MAX_VALUE;
+        List<PhyloNode> parent_candidates = new LinkedList<>();
+        for (PhyloNode v:  g.vertexSet()) {
+            int h_dist = SeqAlgs.hamDist(var_pos, v.seq, seq);
+            if (h_dist == min_h_dist) parent_candidates.add(v);
+            if (h_dist < min_h_dist) {
+                min_h_dist = h_dist;
+                parent_candidates = new LinkedList<>();
+                parent_candidates.add(v);
+            }
+        }
+        return parent_candidates;
+    }
+    private void insertNode(PhyloNode parent, String child_name, DNASequence child_seq) {
+        int h_dist = SeqAlgs.hamDist(this.var_pos, parent.seq, child_seq);
+        if (h_dist == 0) {
+            parent.updateSeq(child_name, child_seq);
+        }
+        else{
+            Set<Pair<Integer,Character>> mutations = SeqAlgs.findMutations(this.var_pos, parent.seq, child_seq);
+            PhyloNode n = new PhyloNode(child_name, mutations, child_seq);
+            g.addVertex(n);
+            g.addEdge(parent, n);
+        }
+    }
+    public void exportEdgesCsv(File out_file) throws FileNotFoundException {
+        PrintWriter f = new PrintWriter(out_file);
+        f.println("Source,Target,Number_mutations");
+        for (DefaultEdge e: g.edgeSet()) {
+            PhyloNode source = g.getEdgeSource(e);
+            PhyloNode target = g.getEdgeTarget(e);
+            f.println(String.format("%s,%s,%d", source, target, target.mutations.size()));
+        }
+        f.close();
+    }
+    public void exportNodesCsv(File out_file) throws FileNotFoundException {
+        PrintWriter f = new PrintWriter(out_file);
+        f.println("Strain,Vertex");
+        for (PhyloNode v: g.vertexSet())
+            for(String s: v.seq_ids) f.println(String.format("%s,%s", s, v));
+        f.close();
+    }
+}
