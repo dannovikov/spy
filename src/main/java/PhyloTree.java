@@ -24,8 +24,9 @@ public class PhyloTree {
         Arrays.sort(keys);
         int i = 1;
         for (Object k : keys) {
+            System.out.println(String.format("Inserting sequences with dist=%d to root. There are %d such sequences.", k, h_dist_map.get(k).size()));
             for (String id : h_dist_map.get(k)) {
-                System.out.print(String.format("Sequences inserted: %d/%d\r", i, seqs.size()));
+                System.out.print(String.format("Inserting sequence #%d/%d into graph with %d nodes\r", i, seqs.size(), g.vertexSet().size()));
                 ++i;
                 insertNode(id, seqs.get(id));
             }
@@ -48,8 +49,8 @@ public class PhyloTree {
     private void insertNode(String seq_name, DNASequence seq) {
         List<PhyloNode> parent_candidates = findParentCandidates(seq);
         if (parent_candidates.size() != 1)
-            System.out.println(String.format("Node %s, #%d, has %d parent candidates",
-                    seq_name, PhyloNode.max_id, parent_candidates.size()));
+            System.out.println(String.format("Node %s has %d parent candidater. Nodes in graph: %d",
+                    seq_name, parent_candidates.size(), g.vertexSet().size()));
 
         int h_dist = SeqAlgs.hamDist(this.var_pos, parent_candidates.get(0).seq, seq);
         if (h_dist == 0) {
@@ -60,6 +61,7 @@ public class PhyloTree {
             g.addVertex(n);
             for (PhyloNode parent: parent_candidates) {
                 Set<Pair<Integer, Character>> mutations = SeqAlgs.findMutations(this.var_pos, parent.seq, seq);
+                System.out.print(mutations);
                 g.addEdge(parent, n, new PhyloEdge(mutations));
             }
         }
