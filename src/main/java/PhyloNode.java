@@ -9,12 +9,10 @@ public class PhyloNode {
     static int max_id = -1;
     int id;
     Set<String> seq_ids;
-    Set<Pair<Integer,Character>> mutations;
     DNASequence seq;
-    public PhyloNode(String id, Set<Pair<Integer,Character>> mutations, DNASequence seq) {
+    public PhyloNode(String id, DNASequence seq) {
         seq_ids = new HashSet<>();
         seq_ids.add(id);
-        this.mutations = mutations;
         this.id = ++max_id;
         this.seq = seq;
     }
