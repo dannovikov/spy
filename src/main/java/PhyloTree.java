@@ -23,8 +23,11 @@ public class PhyloTree {
         g.addVertex(root);
         Object[] keys = h_dist_map.keySet().toArray();
         Arrays.sort(keys);
+        int i = 1;
         for (Object k : keys) {
             for (String id : h_dist_map.get(k)) {
+                System.out.print(String.format("Sequences inserted: %d/%d\r", i, keys.length));
+                ++i;
                 insertNode(id, seqs.get(id));
             }
         }
@@ -53,10 +56,10 @@ public class PhyloTree {
             parent_candidates.get(0).updateSeq(seq_name, seq);
         }
         else{
+            PhyloNode n = new PhyloNode(seq_name, seq);
+            g.addVertex(n);
             for (PhyloNode parent: parent_candidates) {
                 Set<Pair<Integer, Character>> mutations = SeqAlgs.findMutations(this.var_pos, parent.seq, seq);
-                PhyloNode n = new PhyloNode(seq_name, seq);
-                g.addVertex(n);
                 g.addEdge(parent, n, new PhyloEdge(mutations));
             }
         }
