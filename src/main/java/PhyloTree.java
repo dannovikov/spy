@@ -26,7 +26,7 @@ public class PhyloTree {
         for (Object k : keys) {
             System.out.println(String.format("Inserting sequences with dist=%d to root. There are %d such sequences.", k, h_dist_map.get(k).size()));
             for (String id : h_dist_map.get(k)) {
-                System.out.print(String.format("Inserting sequence #%d/%d into graph with %d nodes\r", i, seqs.size(), g.vertexSet().size()));
+                System.out.println(String.format("Inserting sequence #%d/%d into graph with %d nodes", i, seqs.size(), g.vertexSet().size()));
                 ++i;
                 insertNode(id, seqs.get(id));
             }
