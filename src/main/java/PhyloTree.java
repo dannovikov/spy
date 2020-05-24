@@ -2,7 +2,6 @@ import javafx.util.Pair;
 import org.biojava.nbio.core.sequence.DNASequence;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +25,7 @@ public class PhyloTree {
         int i = 1;
         for (Object k : keys) {
             for (String id : h_dist_map.get(k)) {
-                System.out.print(String.format("Sequences inserted: %d/%d\r", i, keys.length));
+                System.out.print(String.format("Sequences inserted: %d/%d\r", i, seqs.size()));
                 ++i;
                 insertNode(id, seqs.get(id));
             }
@@ -49,7 +48,8 @@ public class PhyloTree {
     private void insertNode(String seq_name, DNASequence seq) {
         List<PhyloNode> parent_candidates = findParentCandidates(seq);
         if (parent_candidates.size() != 1)
-            System.out.println(String.format("Node %s has a conflict on step %d", seq_name, PhyloNode.max_id));
+            System.out.println(String.format("Node %s, #%d, has %d parent candidates",
+                    seq_name, PhyloNode.max_id, parent_candidates.size()));
 
         int h_dist = SeqAlgs.hamDist(this.var_pos, parent_candidates.get(0).seq, seq);
         if (h_dist == 0) {
