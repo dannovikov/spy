@@ -1,4 +1,4 @@
-import java.util.Pair;
+import javafx.util.Pair;
 import org.biojava.nbio.core.sequence.DNASequence;
 
 import java.util.HashSet;
