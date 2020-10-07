@@ -50,25 +50,40 @@ public class SeqPreproc {
             }
         }
     }
-    public static LinkedList<Integer> getVariablePositions(LinkedHashMap<String, DNASequence> seqs) {
+
+
+
+    public static LinkedList<Integer> getVariablePositions(LinkedHashMap<String, DNASequence> seqs,
+                                                                                         DNASequence ref) {
         LinkedList<Integer> variablePositions = new LinkedList<>();
         int seq_length = seqs.entrySet().iterator().next().getValue().getLength();
+        System.out.print("Seq_length: ");
+        System.out.println(seq_length);
+        seqs.put("ref", ref);
         for(int i=0; i<seq_length; ++i) {
             Set<String> nucls = new HashSet<>();
             for (Map.Entry<String, DNASequence> entry : seqs.entrySet()) {
                 String nucl = entry.getValue().getCompoundAt(i+1).getShortName();
-                if (nucl.equals("-")) {
+                if (nucl.equals("N")) {
                     continue;
                 }
-                nucls.add(nucl);
-                if (nucls.size() >= 2) {
+                nucls.add(nucl); 
+                if (nucls.size() >= 2) { 
                     variablePositions.add(i);
                     break;
-                }
+                } 
             }
         }
+
+        seqs.remove("ref");
+        System.out.print("Length of Variable Postiions: ");
+        System.out.println(variablePositions.size());
         return variablePositions;
     }
+
+
+
+
     public static Map<Integer, Set<String>> getHamDistToRef(DNASequence ref, LinkedHashMap<String,DNASequence> seqs,
                                                             LinkedList<Integer> var_pos) {
         Map<Integer, Set<String>> h_dist_map = new HashMap<>();
@@ -79,6 +94,7 @@ public class SeqPreproc {
             }
             h_dist_map.get(h_dist).add(entry.getKey());
         }
+
         return h_dist_map;
     }
 }

@@ -1,0 +1,6 @@
+Strain,Vertex
+AAA,0
+CAA,1
+AAC,2
+CCA,3
+CCC,4

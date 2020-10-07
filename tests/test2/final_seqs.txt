@@ -1,0 +1,6 @@
+Node,Seq
+0,AAA
+1,CAA
+2,AAC
+3,CCA
+4,CCC

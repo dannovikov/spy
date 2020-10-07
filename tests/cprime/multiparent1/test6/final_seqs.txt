@@ -1,0 +1,4 @@
+Node,Seq
+0,AAATT
+2,ACCTT
+1,ACATG
