@@ -5,7 +5,6 @@ import java.util.Set;
 
 public class PhyloEdge extends DefaultEdge {
     Set<Pair<Integer,Character>> mutations;
-
     public PhyloEdge(Set<Pair<Integer,Character>> mutations) {
         this.mutations = mutations;
     }
