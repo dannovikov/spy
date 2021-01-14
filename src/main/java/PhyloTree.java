@@ -170,13 +170,6 @@ public class PhyloTree {
     }
 
 
-
-
-
-
-
-
-
     private LinkedList<Integer> fillGapsFromParent(PhyloNode node, PhyloNode parent)
     {
         char[] node_seq = node.seq.getSequenceAsString().toUpperCase().toCharArray();
@@ -201,23 +194,6 @@ public class PhyloTree {
         System.out.println(changedPositions.size() + " changed positions.");
         return changedPositions;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public void exportEdgesCsv(File out_file) throws FileNotFoundException {
