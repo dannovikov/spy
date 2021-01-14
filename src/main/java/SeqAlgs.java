@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class SeqAlgs {
 
-    //var_pos is a list of nonmonochromatic columns, as in varying positions
+
     public static int hamDist(LinkedList<Integer> var_pos, DNASequence s1, DNASequence s2) {
         int h_dist = 0;
         for (Integer i : var_pos) {
@@ -23,7 +23,6 @@ public class SeqAlgs {
                                                               DNASequence parent, DNASequence child) {
         Set<Pair<Integer, Character>> mutations = new HashSet<>();
         for (Integer i : var_pos) {
-            if (parent.toString().charAt(i) == 'N') continue;
             if (parent.getCompoundAt(i+1).getShortName().equals("N") || child.getCompoundAt(i+1).getShortName().equals("N")) continue;
             if (!parent.getCompoundAt(i+1).equals(child.getCompoundAt(i+1))) {
                 mutations.add(new Pair<>(i, child.getCompoundAt(i+1).getShortName().charAt(0)));

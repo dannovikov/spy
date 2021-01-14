@@ -35,40 +35,16 @@ public class PhyloNode implements Comparable<PhyloNode>{
         this.parents=n.parents;
     }
 
-
     @Override
     public int compareTo(PhyloNode o)
     {
-        //Prim 2
-        //Compare distance to closest, then distance to ref
-        if (this.dist_closest > o.dist_closest) return 1;
-        if (this.dist_closest < o.dist_closest) return -1;
+        //Dijkstra
+        //Compare distance to ref only
         if (this.dist_ref > o.dist_ref) return 1;
         if (this.dist_ref < o.dist_ref) return -1;
         return 0;
     }
 
-    // @Override
-    // public int compareTo(PhyloNode o)
-    // {
-    //     //Prim 1
-    //     //Compare distance to ref, then distance to closest
-    //     if (this.dist_ref > o.dist_ref) return 1;
-    //     if (this.dist_ref < o.dist_ref) return -1;
-    //     if (this.dist_closest > o.dist_closest) return 1;
-    //     if (this.dist_closest < o.dist_closest) return -1;
-    //     return 0;
-    // }
-
-    // @Override
-    // public int compareTo(PhyloNode o)
-    // {
-    //     //Dijkstra
-    //     //Compare distance to ref only
-    //     if (this.dist_ref > o.dist_ref) return 1;
-    //     if (this.dist_ref < o.dist_ref) return -1;
-    //     return 0;
-    // }
 
     public void updateSeq(String id, DNASequence seq)
     {
